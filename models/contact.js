@@ -18,6 +18,10 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    isbn: {
+      type: String,
+      match: /^\d{3}-\d-\d{3}-\d{5}-\d$/,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -26,11 +30,13 @@ contactSchema.post('save', handleSaveErrors);
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  email: Joi.string(),
+  phone: Joi.string(),
+  favorite: Joi.boolean(),
+  isbn:Joi.string(),
 });
 
-const UpdateFavoriteSchema = Joi.obecj({
+const UpdateFavoriteSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
