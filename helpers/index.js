@@ -1,7 +1,9 @@
 const RequestError = require("./RequestError");
-const ctrlPackage = require("./ctrlPackage");
+const ctrlPackage = require('./ctrlPackage');
+const handleSaveErrors = require('./handleSaveErrors');
 
 module.exports = {
-	RequestError,
-	ctrlPackage,
+  RequestError,
+  ctrlPackage,
+  handleSaveErrors,
 };
