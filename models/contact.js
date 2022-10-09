@@ -10,17 +10,15 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
+      required: [true, 'Set email for contact'],
     },
     phone: {
       type: String,
+      required: [true, 'Set phone for contact'],
     },
     favorite: {
       type: Boolean,
       default: false,
-    },
-    isbn: {
-      type: String,
-      match: /^\d{3}-\d-\d{3}-\d{5}-\d$/,
     },
   },
   { versionKey: false, timestamps: true }
@@ -30,19 +28,18 @@ contactSchema.post('save', handleSaveErrors);
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string(),
-  phone: Joi.string(),
+  email: Joi.string().email().required(),
+  phone: Joi.string().required(),
   favorite: Joi.boolean(),
-  isbn:Joi.string(),
 });
 
-const UpdateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean(),
+const UpdateStatusSchema = Joi.object({
+  favorite: Joi.boolean().required().error(new Error("missing field favorite")),
 });
 
 const schemas = {
   addSchema,
-  UpdateFavoriteSchema,
+  UpdateStatusSchema,
 };
 
 const Contact = model('contact', contactSchema);

@@ -1,12 +1,10 @@
 const express = require('express');
-
 const { ctrlPackage } = require('../../helpers/');
 const ctrl = require('../../controller/contacts');
-
 const { validateBody } = require('../../middlewares');
 const { schemas } = require('../../models/contact');
-
 const router = express.Router();
+
 
 router.get('/', ctrlPackage(ctrl.getList));
 
@@ -20,9 +18,9 @@ router.put(
   ctrlPackage(ctrl.updateById)
 );
 router.patch(
-  '/:contactId',
-  validateBody(schemas.UpdateFavoriteSchema),
-  ctrlPackage(ctrl.updateFavorite)
+  '/:contactId/favorite',
+  validateBody(schemas.UpdateStatusSchema),
+  ctrlPackage(ctrl.updateStatusContact)
 );
 router.delete('/:contactId', ctrlPackage(ctrl.removeById));
 
