@@ -3,13 +3,10 @@ const Joi = require('Joi');
 const { handleSaveErrors } = require('../helpers');
 
 const emailRegEx = /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/;
+const status = ['starter', 'pro', 'business'];
 
 const userSchema = new Schema(
   {
-    name: {
-      type: String,
-      required: [true, 'Set name for contact'],
-    },
     email: {
       type: String,
       match: emailRegEx,
@@ -20,16 +17,25 @@ const userSchema = new Schema(
       type: String,
       required: [true, 'Set phone for contact'],
     },
+    subscription: {
+      type: String,
+      enum: status,
+      default: 'starter',
+    },
+    token: {
+      type: String,
+      default: null,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
 userSchema.post('save', handleSaveErrors);
 
-const registerSchema = Joi.object({
-  name: Joi.string().required(),
+const signupSchema = Joi.object({
   email: Joi.string().pattern(emailRegEx).required(),
-  password: Joi.string().required(),
+  password: Joi.string().min(6).required(),
+  subscription: Joi.string(),
 });
 
 const loginSchema = Joi.object({
@@ -37,9 +43,14 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const subscriptionSchema = Joi.object({
+  subscription: Joi.string().valid(...status),
+});
+
 const schemas = {
-  registerSchema,
+  signupSchema,
   loginSchema,
+  subscriptionSchema,
 };
 
 const User = model('user', userSchema);
