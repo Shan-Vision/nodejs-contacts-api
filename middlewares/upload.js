@@ -2,11 +2,19 @@ const multer = require('multer');
 const path = require('path');
 
 
-const tempDir = path.join(__dirname, '../', 'temp');
+const tmpDir = path.join(__dirname, '../', 'tmp');
 
 const multerConfig = multer.diskStorage({
-  destination: tempDir,
+  destination: tmpDir,
   filename: (req, file, cb) => {
+    // Jimp.read(tmpDir)
+    //   .then(image => {
+    //     return image.resize(250, 250);
+    //   })
+    //   .catch(err => {
+    //     throw RequestError(err.status, err.message);
+    //   });
+ 
     cb(null, file.originalname);
   },
 });
