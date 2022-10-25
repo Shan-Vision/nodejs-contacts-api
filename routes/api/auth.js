@@ -19,6 +19,7 @@ router.post(
 router.patch(
   '/subscription',
   authenticate,
+  validateBody(schemas.subscriptionSchema),
   ctrlPackage(ctrl.updateSubscription)
 );
 router.get('/current', authenticate, ctrlPackage(ctrl.getCurrent));
