@@ -10,7 +10,8 @@ router.post(
   validateBody(schemas.signupSchema),
   ctrlPackage(ctrl.register)
 );
-
+router.get('/verify/:verificationToken', ctrlPackage(ctrl.verify));
+router.post('/verify', validateBody(schemas.verifyEmailSchema), ctrlPackage(ctrl.resendEmail))
 router.post(
   '/login',
   validateBody(schemas.loginSchema),
