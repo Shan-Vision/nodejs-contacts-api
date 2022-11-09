@@ -4,21 +4,25 @@ const { BASE_URL } = process.env;
 
 
 const resendEmail = async (req, res) => {
-  const { email } = req.params;
+  const { email } = req.body;
+  if (!email) {
+    throw RequestError(400, 'Missing required field email');
+  }
   const user = await User.findOne({ email });
-  if (!user || user.verify) {
-    throw RequestError(404);
+  
+  if (user.verify) {
+    throw RequestError(400, 'Verification has already been passed');
   }
 
   const mail = {
     to: email,
     subject: 'Verify email',
-    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click to verify your email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${user.verificationToken}">Click to verify your email</a>`,
   };
   await sendEmail(mail);
 
   res.json({
-    message: 'email send success',
+    message: 'Verification email sent',
   });
 };
 
