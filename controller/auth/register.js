@@ -3,14 +3,14 @@ const gravatar = require('gravatar');
 const { nanoid } = require('nanoid');
 
 const { User } = require('../../models/user');
-const { RequstError, sendEmail } = require('../../helpers');
+const { RequestError, sendEmail } = require('../../helpers');
 const { BASE_URL } = process.env;
 
 const register = async (req, res) => {
   const { email, password, subscription } = req.body;
   const user = await User.findOne({ email });
   if (user) {
-    throw RequstError(409, 'Email in use');
+    throw RequestError(409, 'Email in use');
   }
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
@@ -23,17 +23,15 @@ const register = async (req, res) => {
     verificationToken,
   });
 
-  const mail = {
-    to: email,
-    subject: 'Verify email',
-    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click to verify your email</a>`,
-  };
-  await sendEmail(mail);
+ const verificationLink = `${BASE_URL}/api/users/verify/${verificationToken}`;
+
+ await sendEmail(email, verificationLink);
 
   res.status(201).json({
     user: {
       email: result.email,
       subscription: result.subscription,
+      avatarURL: result.avatarURL,
     },
   });
 };

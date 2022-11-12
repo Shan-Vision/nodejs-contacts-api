@@ -18,4 +18,4 @@ const verify = async (req, res) => {
   });
 };
 
-module.export = verify;
+module.exports = verify;
