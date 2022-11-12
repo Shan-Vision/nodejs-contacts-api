@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { User } = require('../../models/user');
-const { RequstError } = require('../../helpers');
+const { RequestError } = require('../../helpers');
 const { SECRET_KEY } = process.env;
 
 const login = async (req, res) => {
@@ -9,12 +9,12 @@ const login = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user || !user.verify) {
-    throw RequstError(401, 'Email or password is wrong');
+    throw RequestError(401, 'Email or password is wrong');
   }
   const passwordCompare = await bcrypt.compare(password, user.password);
 
   if (!passwordCompare) {
-    throw RequstError(401, 'Email or password is wrong');
+    throw RequestError(401, 'Email or password is wrong');
   }
   const payload = {
     id: user._id,
