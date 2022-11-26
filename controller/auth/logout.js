@@ -4,7 +4,7 @@ const logout = async (req, res) => {
   await User.findByIdAndUpdate(_id, { token: null });
 
   res.status(204).json({
-    message: 'Logout success',
+    message: 'No Content',
   });
 };
 
